@@ -1,0 +1,12 @@
+<form method="POST">
+    <input type="password" name="password" placeholder="A tua password de 16 chars">
+    <button type="submit">Entrar</button>
+</form>
+
+<a href="/auth/register">Não tens conta? Regista-te aqui</a>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endwith %}

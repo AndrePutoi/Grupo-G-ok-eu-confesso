@@ -1,0 +1,8 @@
+<form method="POST">
+    <button type="submit">Registar</button>
+</form>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endwith %}

@@ -1,6 +1,13 @@
-from app import create_app
+from app import create_app, db
+from flask import redirect, url_for
 
 app = create_app()
 
+@app.route('/')
+def index():
+    return redirect(url_for('auth.login'))
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+    # FtXQn0M5Sebroak7
