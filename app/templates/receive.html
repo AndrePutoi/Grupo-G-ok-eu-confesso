@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receber Mensagem - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Ler Mensagem</h1>
+
+        <form method="POST">
+
+            <textarea 
+                name="encrypted_body"
+                placeholder="Cola aqui o corpo cifrado do e-mail"
+                rows="6"
+                required
+            ></textarea>
+
+            <input
+                type="text"
+                name="code"
+                placeholder="Código de acesso"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Password da conta"
+                required
+            >
+
+            <textarea
+                name="private_key"
+                placeholder="Cola aqui a tua chave privada"
+                rows="6"
+                required
+            ></textarea>
+
+            <label>
+                <input type="checkbox" required>
+                Confirmo que recebi esta mensagem
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" required>
+                Confirmo que vou ler esta mensagem
+            </label>
+
+            <br><br>
+
+            <button type="submit">
+                Desencriptar Mensagem
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

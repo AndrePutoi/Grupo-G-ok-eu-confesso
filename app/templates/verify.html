@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Recibo - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Verificar Recibo</h1>
+
+        <p>
+            Introduz o identificador da mensagem ou do recibo para verificar
+            se existe confirmação de leitura válida.
+        </p>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="receipt_id"
+                placeholder="ID da mensagem ou recibo"
+                required
+            >
+
+            <button type="submit">
+                Verificar
+            </button>
+
+        </form>
+
+        <p>
+            <a href="/dashboard">Voltar ao painel</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

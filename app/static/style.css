@@ -64,3 +64,29 @@ a {
 .button-link:hover {
     background-color: #1d4ed8;
 }
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+label {
+    font-size: 16px;
+}
+
+input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.receipt-box {
+    background-color: #f9fafb;
+    border-left: 5px solid #2563eb;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

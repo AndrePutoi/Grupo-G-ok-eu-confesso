@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Recibo de Leitura</h1>
+
+        <div class="receipt-box">
+            <p><strong>Estado:</strong> {{ status }}</p>
+            <p><strong>Mensagem:</strong> {{ message_id }}</p>
+            <p><strong>Destinatário:</strong> {{ recipient_email }}</p>
+            <p><strong>Data/Hora:</strong> {{ timestamp }}</p>
+            <p><strong>Assinatura:</strong> {{ signature_status }}</p>
+        </div>
+
+        <p>
+            <a href="/dashboard">Voltar ao painel</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

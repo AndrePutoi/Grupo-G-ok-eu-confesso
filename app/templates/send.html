@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Mensagem - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Enviar Mensagem</h1>
+
+        <form method="POST">
+
+            <input
+                type="email"
+                name="destination_email"
+                placeholder="E-mail do destinatário"
+                required
+            >
+
+            <input
+                type="text"
+                name="subject"
+                placeholder="Assunto"
+                required
+            >
+
+            <textarea
+                name="message_body"
+                placeholder="Escreve aqui a mensagem"
+                rows="8"
+                required
+            ></textarea>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="A tua password"
+                required
+            >
+
+            <button type="submit">
+                Encriptar e Enviar
+            </button>
+
+        </form>
+
+        <p>
+            <a href="/dashboard">Voltar ao painel</a>
+        </p>
+
+    </div>
+
+</body>
+</html>
