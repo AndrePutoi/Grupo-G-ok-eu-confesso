@@ -12,8 +12,8 @@ Sistema web que garante que o destinatário de um email realmente leu a mensagem
 
 **1. Clona o repositório**
 ```bash
-git clone <link-do-repositorio>
-cd ok-eu-confesso
+git clone https://github.com/AndrePutoi/Grupo-G-ok-eu-confesso.git
+cd Grupo-G-ok-eu-confesso
 ```
 
 **2. Cria e ativa o ambiente virtual**
@@ -72,7 +72,11 @@ ok-eu-confesso/
 │   │   ├── rsa_keys.py      ← geração de chaves RSA e assinaturas
 │   │   └── aes_email.py     ← cifra e decifra do email
 │   ├── templates/           ← páginas HTML
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── dashboard.html
 │   └── static/              ← CSS, JS, imagens
+│       └── style.css
 ├── config.py                ← configurações gerais
 ├── .env                     ← variáveis secretas (não vai para o git)
 ├── requirements.txt
