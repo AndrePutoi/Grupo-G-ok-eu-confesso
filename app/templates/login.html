@@ -1,12 +1,44 @@
-<form method="POST">
-    <input type="password" name="password" placeholder="A tua password de 16 chars">
-    <button type="submit">Entrar</button>
-</form>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OK-Eu-CONFESSO</title>
 
-<a href="/auth/register">Não tens conta? Regista-te aqui</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endwith %}
+    <div class="container">
+
+        <h1>Login</h1>
+
+        <form method="POST">
+
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="A tua password de 16 chars"
+                required
+            >
+
+            <button type="submit">Entrar</button>
+
+        </form>
+
+        <p>
+            <a href="/auth/register">
+                Não tens conta? Regista-te aqui
+            </a>
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+    </div>
+
+</body>
+</html>

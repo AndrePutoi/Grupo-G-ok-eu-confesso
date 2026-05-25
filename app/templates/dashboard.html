@@ -1,2 +1,31 @@
-<h1>Bem-vindo!</h1>
-<a href="/auth/logout">Sair</a>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>OK-Eu-CONFESSO</h1>
+
+        <p>Bem-vindo ao teu painel.</p>
+
+        <div class="menu">
+            <a class="button-link" href="/sender/send">Enviar e-mail cifrado</a>
+            <a class="button-link" href="/receiver/receive">Ler e-mail recebido</a>
+            <a class="button-link" href="/receiver/verify">Verificar recibo</a>
+        </div>
+
+        <p>
+            <a href="/auth/logout">Sair</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

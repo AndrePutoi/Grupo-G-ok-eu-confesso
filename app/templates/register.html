@@ -1,8 +1,48 @@
-<form method="POST">
-    <button type="submit">Registar</button>
-</form>
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endwith %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo - OK-Eu-CONFESSO</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Registo</h1>
+
+        <p>
+            Ao clicar no botão abaixo será criada:
+        </p>
+
+        <ul>
+            <li>uma password de 16 caracteres</li>
+            <li>um par de chaves RSA</li>
+        </ul>
+
+        <form method="POST">
+
+            <button type="submit">
+                Criar Conta
+            </button>
+
+        </form>
+
+        <p>
+            <a href="/auth/login">
+                Já tens conta? Faz login
+            </a>
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+    </div>
+
+</body>
+</html>
