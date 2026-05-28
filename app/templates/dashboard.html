@@ -16,10 +16,18 @@
         <p>Bem-vindo ao teu painel.</p>
 
         <div class="menu">
-            <a class="button-link" href="/sender/send">Enviar e-mail cifrado</a>
-            <a class="button-link" href="/receiver/receive">Ler e-mail recebido</a>
-            <a class="button-link" href="/receiver/verify">Verificar recibo</a>
-        </div>
+            <a class="button-link" href="{{ url_for('sender.send_message') }}">
+                Enviar e-mail cifrado
+            </a>
+
+            <a class="button-link" href="{{ url_for('receiver.receive_message') }}">
+                Ler e-mail recebido
+            </a>
+
+            <a class="button-link" href="{{ url_for('receiver.verify_receipt') }}">
+                Verificar recibo
+            </a>
+</div>
 
         <p>
             <a href="/auth/logout">Sair</a>
