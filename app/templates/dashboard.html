@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>OK-Eu-CONFESSO</h1>
-
-        <p>Bem-vindo ao teu painel.</p>
-
-        <div class="menu">
-            <a class="button-link" href="{{ url_for('sender.send_message') }}">
-                Enviar e-mail cifrado
-            </a>
-
-            <a class="button-link" href="{{ url_for('receiver.receive_message') }}">
-                Ler e-mail recebido
-            </a>
-
-            <a class="button-link" href="{{ url_for('receiver.verify_receipt') }}">
-                Verificar recibo
-            </a>
-</div>
-
-        <p>
-            <a href="/auth/logout">Sair</a>
-        </p>
-
+    <div class="brand">
+      <div class="brand-icon">🔐</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Sistema de Recibo de Leitura Criptográfico</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">⚡</span> O que queres fazer?</p>
+
+      <div class="menu-grid">
+        <a class="menu-item" href="{{ url_for('sender.send_message') }}">
+          <div class="item-icon">✉️</div>
+          <div class="item-text">
+            <strong>Enviar mensagem cifrada</strong>
+            <small>Cifra e envia um e-mail com código de acesso</small>
+          </div>
+        </a>
+        <a class="menu-item" href="{{ url_for('receiver.receive_message') }}">
+          <div class="item-icon">🔓</div>
+          <div class="item-text">
+            <strong>Ler mensagem recebida</strong>
+            <small>Decifra uma mensagem com o teu código e chave</small>
+          </div>
+        </a>
+        <a class="menu-item" href="{{ url_for('receiver.verify_receipt') }}">
+          <div class="item-icon">✅</div>
+          <div class="item-text">
+            <strong>Verificar recibo de leitura</strong>
+            <small>Confirma se uma mensagem foi lida e valida a assinatura</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="divider"></div>
+      <div style="text-align:center;">
+        <a class="btn btn-ghost" href="/auth/logout">↩ Sair da conta</a>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>

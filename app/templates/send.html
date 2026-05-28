@@ -1,59 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enviar Mensagem - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enviar Mensagem — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>Enviar Mensagem</h1>
-
-        <form method="POST">
-
-            <input
-                type="email"
-                name="destination_email"
-                placeholder="E-mail do destinatário"
-                required
-            >
-
-            <input
-                type="text"
-                name="subject"
-                placeholder="Assunto"
-                required
-            >
-
-            <textarea
-                name="message_body"
-                placeholder="Escreve aqui a mensagem"
-                rows="8"
-                required
-            ></textarea>
-
-            <input
-                type="password"
-                name="password"
-                placeholder="A tua password"
-                required
-            >
-
-            <button type="submit">
-                Encriptar e Enviar
-            </button>
-
-        </form>
-
-        <p>
-            <a href="/dashboard">Voltar ao painel</a>
-        </p>
-
+    <div class="brand">
+      <div class="brand-icon">✉️</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Enviar mensagem cifrada</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">🔒</span> Nova mensagem</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'warn' }}">
+            {{ '✓' if category == 'success' else '✗' if category == 'error' else 'ℹ' }} {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST">
+        <div class="field">
+          <label for="recipient_email">E-mail do destinatário</label>
+          <input
+            type="email"
+            id="recipient_email"
+            name="recipient_email"
+            placeholder="exemplo@email.com"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="subject">Assunto</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="Assunto da mensagem"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="body">Mensagem</label>
+          <textarea
+            id="body"
+            name="body"
+            placeholder="Escreve aqui a mensagem..."
+            rows="7"
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">🔒 Cifrar e enviar</button>
+      </form>
+
+      <div class="nav-footer">
+        <a href="/auth/dashboard">← Voltar ao painel</a>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>

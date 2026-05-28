@@ -1,48 +1,87 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registo - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registo — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>Registo</h1>
-
-        <p>
-            Ao clicar no botão abaixo será criada:
-        </p>
-
-        <ul>
-            <li>uma password de 16 caracteres</li>
-            <li>um par de chaves RSA</li>
-        </ul>
-
-        <form method="POST">
-
-            <button type="submit">
-                Criar Conta
-            </button>
-
-        </form>
-
-        <p>
-            <a href="/auth/login">
-                Já tens conta? Faz login
-            </a>
-        </p>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endwith %}
-
+    <div class="brand">
+      <div class="brand-icon">🔐</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Criar nova conta</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">🪪</span> Registo</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+            {{ '✗' if category == 'error' else 'ℹ' }} {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      {% if password %}
+        <!-- ── Mostrado após registo bem-sucedido ── -->
+        <div class="alert alert-success">✓ Conta criada com sucesso. Guarda as credenciais abaixo antes de sair desta página.</div>
+
+        <div class="cred-box">
+          <p class="cred-label">Password de acesso</p>
+          <p class="cred-value">{{ password }}</p>
+        </div>
+
+        <div class="cred-box">
+          <p class="cred-label">Chave pública RSA</p>
+          <p class="cred-value">{{ public_key }}</p>
+        </div>
+
+        <div class="cred-box">
+          <p class="cred-label">Chave privada RSA (guarda num local seguro)</p>
+          <p class="cred-value">{{ private_key }}</p>
+        </div>
+
+        <div class="alert alert-warn">
+          ⚠ Estas credenciais não serão mostradas novamente. Guarda-as agora.
+        </div>
+
+        <a href="/auth/login" class="btn btn-primary">→ Ir para o Login</a>
+
+      {% else %}
+        <!-- ── Formulário inicial ── -->
+        <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px;">
+          Ao criares a conta, o sistema irá gerar automaticamente:
+        </p>
+
+        <div class="receipt-box" style="margin-bottom:24px;">
+          <div class="receipt-row">
+            <span class="label">Password</span>
+            <span class="value">16 caracteres aleatórios</span>
+          </div>
+          <div class="receipt-row">
+            <span class="label">Par de chaves</span>
+            <span class="value">RSA (pública + privada)</span>
+          </div>
+          <div class="receipt-row">
+            <span class="label">Proteção da chave privada</span>
+            <span class="value">AES-256-CBC + PBKDF2</span>
+          </div>
+        </div>
+
+        <form method="POST">
+          <button type="submit" class="btn btn-primary">⚡ Criar conta</button>
+        </form>
+
+        <div class="nav-footer">
+          Já tens conta? <a href="/auth/login">Faz login</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
 </body>
 </html>

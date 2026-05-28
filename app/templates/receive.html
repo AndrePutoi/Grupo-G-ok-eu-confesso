@@ -1,69 +1,112 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receber Mensagem - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ler Mensagem — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>Ler Mensagem</h1>
-
-        <form method="POST">
-
-            <textarea 
-                name="encrypted_body"
-                placeholder="Cola aqui o corpo cifrado do e-mail"
-                rows="6"
-                required
-            ></textarea>
-
-            <input
-                type="text"
-                name="code"
-                placeholder="Código de acesso"
-                required
-            >
-
-            <input
-                type="password"
-                name="password"
-                placeholder="Password da conta"
-                required
-            >
-
-            <textarea
-                name="private_key"
-                placeholder="Cola aqui a tua chave privada"
-                rows="6"
-                required
-            ></textarea>
-
-            <label>
-                <input type="checkbox" required>
-                Confirmo que recebi esta mensagem
-            </label>
-
-            <br><br>
-
-            <label>
-                <input type="checkbox" required>
-                Confirmo que vou ler esta mensagem
-            </label>
-
-            <br><br>
-
-            <button type="submit">
-                Desencriptar Mensagem
-            </button>
-
-        </form>
-
+    <div class="brand">
+      <div class="brand-icon">🔓</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Decifrar mensagem recebida</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">📨</span> Ler mensagem</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'warn' }}">
+            {{ '✓' if category == 'success' else '✗' if category == 'error' else 'ℹ' }} {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      {% if decrypted_body %}
+        <div class="alert alert-success">✓ Mensagem decifrada com sucesso. Recibo de leitura gerado.</div>
+        <p style="font-size:12px; color:var(--text-muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Mensagem</p>
+        <div class="message-output">{{ decrypted_body }}</div>
+        <a href="/auth/dashboard" class="btn btn-primary">← Voltar ao painel</a>
+
+      {% else %}
+        <form method="POST">
+          <div class="field">
+            <label for="ciphertext">Corpo cifrado do e-mail</label>
+            <textarea
+              id="ciphertext"
+              name="ciphertext"
+              placeholder="Cola aqui o conteúdo cifrado recebido no e-mail..."
+              rows="5"
+              required
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="code">Código de acesso</label>
+            <input
+              type="text"
+              id="code"
+              name="code"
+              placeholder="Código de 32 caracteres hexadecimal"
+              autocomplete="off"
+              required
+            >
+            <p class="hint">Está incluído no e-mail que recebeste.</p>
+          </div>
+
+          <div class="field">
+            <label for="password">A tua password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password da conta"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="private_key">Chave privada RSA (JSON)</label>
+            <textarea
+              id="private_key"
+              name="private_key"
+              placeholder='{"n": "...", "d": "..."}'
+              rows="5"
+              required
+            ></textarea>
+            <p class="hint">Cola aqui o JSON da chave privada gerado no registo.</p>
+          </div>
+
+          <div class="divider"></div>
+
+          <p style="font-size:13px; color:var(--text-dim); margin-bottom:14px;">
+            Para decifrar, tens de confirmar os dois pontos abaixo:
+          </p>
+
+          <label class="confirm-box" for="confirm_receipt">
+            <input type="checkbox" id="confirm_receipt" name="confirm_receipt" value="yes" required>
+            <span>Confirmo que <strong>recebi</strong> esta mensagem no meu e-mail.</span>
+          </label>
+
+          <label class="confirm-box" for="confirm_read">
+            <input type="checkbox" id="confirm_read" name="confirm_read" value="yes" required>
+            <span>Confirmo que <strong>vou ler</strong> esta mensagem.</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:10px;">🔓 Decifrar mensagem</button>
+        </form>
+
+        <div class="nav-footer">
+          <a href="/auth/dashboard">← Voltar ao painel</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
 </body>
 </html>

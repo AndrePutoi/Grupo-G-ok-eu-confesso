@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recibo - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recibo de Leitura — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>Recibo de Leitura</h1>
-
-        <div class="receipt-box">
-            <p><strong>Estado:</strong> {{ status }}</p>
-            <p><strong>Mensagem:</strong> {{ message_id }}</p>
-            <p><strong>Destinatário:</strong> {{ recipient_email }}</p>
-            <p><strong>Data/Hora:</strong> {{ timestamp }}</p>
-            <p><strong>Assinatura:</strong> {{ signature_status }}</p>
-        </div>
-
-        <p>
-            <a href="/dashboard">Voltar ao painel</a>
-        </p>
-
+    <div class="brand">
+      <div class="brand-icon">📋</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Recibo de leitura</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">🧾</span> Detalhe do recibo</p>
+
+      <div class="receipt-box">
+        <div class="receipt-row">
+          <span class="label">Estado</span>
+          <span class="value">
+            {% if status == 'lido' %}
+              <span class="badge badge-valid">✓ Lido</span>
+            {% elif status == 'pendente' %}
+              <span class="badge badge-pending">⏳ Pendente</span>
+            {% else %}
+              <span class="badge badge-invalid">✗ {{ status }}</span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">ID da mensagem</span>
+          <span class="value">{{ message_id }}</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Destinatário</span>
+          <span class="value">{{ recipient_email }}</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Data / Hora</span>
+          <span class="value">{{ timestamp }}</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Assinatura RSA</span>
+          <span class="value">
+            {% if signature_status == 'válida' or signature_status == 'valida' %}
+              <span class="badge badge-valid">✓ Válida</span>
+            {% elif signature_status == 'inválida' or signature_status == 'invalida' %}
+              <span class="badge badge-invalid">✗ Inválida</span>
+            {% else %}
+              <span class="badge badge-pending">— {{ signature_status }}</span>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+
+      <a href="/dashboard" class="btn btn-primary">← Voltar ao painel</a>
+    </div>
+
+  </div>
 </body>
 </html>

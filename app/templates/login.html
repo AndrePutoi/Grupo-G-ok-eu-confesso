@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - OK-Eu-CONFESSO</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — OK-Eu-CONFESSO</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div class="container">
 
-    <div class="container">
-
-        <h1>Login</h1>
-
-        <form method="POST">
-
-            <input 
-                type="password" 
-                name="password" 
-                placeholder="A tua password de 16 chars"
-                required
-            >
-
-            <button type="submit">Entrar</button>
-
-        </form>
-
-        <p>
-            <a href="/auth/register">
-                Não tens conta? Regista-te aqui
-            </a>
-        </p>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endwith %}
-
+    <div class="brand">
+      <div class="brand-icon">🔐</div>
+      <h1>OK-Eu-<span>CONFESSO</span></h1>
+      <p class="tagline">Acesso ao sistema</p>
     </div>
 
+    <div class="card">
+      <p class="card-title"><span class="icon">🔑</span> Entrar na conta</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+            {{ '✗' if category == 'error' else 'ℹ' }} {{ message }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST">
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="A tua password de 16 caracteres"
+            autocomplete="current-password"
+            required
+          >
+          <p class="hint">Usa a password de 16 caracteres gerada no registo.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">→ Entrar</button>
+      </form>
+
+      <div class="nav-footer">
+        Não tens conta? <a href="/auth/register">Regista-te aqui</a>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>
