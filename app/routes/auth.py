@@ -18,12 +18,16 @@ VALID_CIPHER_MODES = {'CBC', 'CTR'}
 
 
 def generate_password(length=16):
+    """Gera uma password aleatória de 16 caracteres alfanuméricos.
+    Usa secrets para garantir aleatoriedade criptograficamente segura."""
     alphabet = string.ascii_letters + string.digits
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """GET  — mostra o formulário de registo com opções de segurança.
+    POST — gera password, par de chaves RSA e guarda o utilizador na BD."""
     if request.method == 'POST':
         email       = request.form.get('email', '').strip() or None
         key_size    = int(request.form.get('key_size', 2048))
@@ -70,6 +74,8 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """GET  — mostra o formulário de login.
+    POST — verifica a password contra todos os utilizadores (não há nome de utilizador)."""
     if request.method == 'POST':
         password = request.form.get('password')
         users = User.query.all()
@@ -93,6 +99,7 @@ def login():
 @auth_bp.route('/logout')
 @login_required
 def logout():
+    """Termina a sessão do utilizador e redireciona para o login."""
     logout_user()
     return redirect(url_for('auth.login'))
 
@@ -100,4 +107,5 @@ def logout():
 @auth_bp.route('/dashboard')
 @login_required
 def dashboard():
+    """Painel principal — apenas acessível com sessão ativa."""
     return render_template('dashboard.html')
