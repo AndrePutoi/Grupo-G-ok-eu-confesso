@@ -7,9 +7,13 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(256), nullable=True)
     password_hash = db.Column(db.String(256), nullable=False)
     public_key = db.Column(db.Text, nullable=False)
     private_key_encrypted = db.Column(db.Text, nullable=False)
+    key_size = db.Column(db.Integer, default=2048)
+    hash_algo = db.Column(db.String(16), default='SHA256')
+    cipher_mode = db.Column(db.String(8), default='CBC')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     messages_sent = db.relationship('Message', backref='sender', lazy=True)
@@ -34,5 +38,7 @@ class Receipt(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'), nullable=False)
-    signed_receipt = db.Column(db.Text, nullable=False)  # assinatura RSA do recibo
+    signed_receipt = db.Column(db.Text, nullable=False)
+    signer_public_key = db.Column(db.Text, nullable=False)
+    hash_algo = db.Column(db.String(16), default='SHA256')
     confirmed_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -28,21 +28,30 @@
 
       {% if decrypted_body %}
         <div class="alert alert-success">✓ Mensagem decifrada com sucesso. Recibo de leitura gerado.</div>
+
+        {% if receipt_id %}
+          <div class="alert alert-warn">
+            ℹ Recibo gerado para a mensagem <strong>#{{ receipt_id }}</strong>. O remetente já pode verificar a assinatura.
+          </div>
+        {% endif %}
+
         <p style="font-size:12px; color:var(--text-muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Mensagem</p>
         <div class="message-output">{{ decrypted_body }}</div>
-        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">← Voltar ao painel</a>        
-         
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">← Voltar ao painel</a>
+
       {% else %}
         <form method="POST">
+
           <div class="field">
-            <label for="ciphertext">Corpo cifrado do e-mail</label>
+            <label for="ciphertext">Corpo da mensagem cifrada</label>
             <textarea
               id="ciphertext"
               name="ciphertext"
-              placeholder="Cola aqui o conteúdo cifrado recebido no e-mail..."
+              placeholder="Cola aqui o bloco cifrado do e-mail..."
               rows="5"
               required
             ></textarea>
+            <p class="hint">Está entre os separadores no e-mail que recebeste.</p>
           </div>
 
           <div class="field">
@@ -75,7 +84,7 @@
             <textarea
               id="private_key"
               name="private_key"
-              placeholder='{"n": "...", "d": "..."}'
+              placeholder='{"mode": "CBC", "sal": "...", "iv": "...", "encrypted_key": "..."}'
               rows="5"
               required
             ></textarea>
@@ -85,7 +94,7 @@
           <div class="divider"></div>
 
           <p class="hint-intro">
-              Para decifrar, tens de confirmar os dois pontos abaixo:
+            Para decifrar, tens de confirmar os dois pontos abaixo:
           </p>
 
           <label class="confirm-box" for="confirm_receipt">
@@ -102,7 +111,9 @@
         </form>
 
         <div class="nav-footer">
-         <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
+          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
+          &nbsp;·&nbsp;
+          <a href="{{ url_for('auth.register') }}">Ainda não tens conta? Regista-te</a>
         </div>
       {% endif %}
     </div>

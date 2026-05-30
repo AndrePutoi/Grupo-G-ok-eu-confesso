@@ -76,7 +76,7 @@
 
       {% else %}
         <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px;">
-          Introduz o ID da mensagem e a chave pública do destinatário para verificar o recibo e validar a assinatura.
+          Introduz o ID da mensagem para verificar se foi lida e validar a assinatura digital do destinatário.
         </p>
 
         <form method="POST">
@@ -87,27 +87,12 @@
               id="message_id"
               name="message_id"
               placeholder="ex: 1"
+              pattern="[0-9]+"
+              inputmode="numeric"
               autocomplete="off"
               required
             >
-            <p class="hint">
-              O ID numérico da mensagem (ex: 1, 2, 3...)
-            </p>
-          </div>
-
-          <div class="field">
-            <label for="public_key">Chave pública RSA (PEM)</label>
-            <textarea
-              id="public_key"
-              name="public_key"
-              placeholder="-----BEGIN PUBLIC KEY-----&#10;...&#10;-----END PUBLIC KEY-----"
-              rows="5"
-              required
-            ></textarea>
-
-            <p class="hint">
-              Chave pública do destinatário, em formato PEM.
-            </p>
+            <p class="hint">O ID numérico mostrado após o envio da mensagem.</p>
           </div>
 
           <button type="submit" class="btn btn-primary">

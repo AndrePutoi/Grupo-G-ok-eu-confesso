@@ -45,6 +45,11 @@
           <p class="cred-value">{{ private_key }}</p>
         </div>
 
+        <div class="cred-box">
+          <p class="cred-label">Parâmetros de segurança</p>
+          <p class="cred-value">RSA-{{ key_size }} · {{ hash_algo }} · AES-256-{{ cipher_mode }}</p>
+        </div>
+
         <div class="alert alert-warn">
           ⚠ Estas credenciais não serão mostradas novamente. Guarda-as agora.
         </div>
@@ -73,6 +78,41 @@
         </div>
 
         <form method="POST">
+          <div class="field">
+            <label for="email">O teu e-mail (opcional)</label>
+            <input type="email" id="email" name="email" placeholder="para receber notificações de leitura">
+            <p class="hint">Se preencheres, serás notificado quando o destinatário ler a mensagem.</p>
+          </div>
+
+          <div class="divider"></div>
+          <p class="hint-intro">Parâmetros de segurança (opcional):</p>
+
+          <div class="field">
+            <label for="key_size">Tamanho da chave RSA</label>
+            <select id="key_size" name="key_size">
+              <option value="2048" selected>RSA-2048 (recomendado)</option>
+              <option value="3072">RSA-3072</option>
+              <option value="4096">RSA-4096</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="hash_algo">Função de hash para assinaturas</label>
+            <select id="hash_algo" name="hash_algo">
+              <option value="SHA256" selected>SHA-256 (recomendado)</option>
+              <option value="SHA384">SHA-384</option>
+              <option value="SHA512">SHA-512</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="cipher_mode">Cifra da chave privada</label>
+            <select id="cipher_mode" name="cipher_mode">
+              <option value="CBC" selected>AES-256-CBC (recomendado)</option>
+              <option value="CTR">AES-256-CTR</option>
+            </select>
+          </div>
+
           <button type="submit" class="btn btn-primary">⚡ Criar conta</button>
         </form>
 

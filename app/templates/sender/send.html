@@ -26,48 +26,78 @@
         {% endfor %}
       {% endwith %}
 
-      <form method="POST">
-        <div class="field">
-          <label for="recipient_email">E-mail do destinatário</label>
-          <input
-            type="email"
-            id="recipient_email"
-            name="recipient_email"
-            placeholder="exemplo@email.com"
-            required
-          >
+      {% if message_id %}
+        <!-- Mostrado após envio bem-sucedido -->
+        <div class="cred-box">
+          <p class="cred-label">ID da mensagem</p>
+          <p class="cred-value">{{ message_id }}</p>
+        </div>
+        <div class="alert alert-warn">
+          ⚠ Comunica este ID ao destinatário — é necessário para verificar o recibo de leitura.
+        </div>
+        <a href="{{ url_for('sender.send_message') }}" class="btn btn-primary">✉️ Enviar outra mensagem</a>
+        <div class="nav-footer">
+          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
         </div>
 
-        <div class="field">
-          <label for="subject">Assunto</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            placeholder="Assunto da mensagem"
-            required
-          >
+      {% else %}
+        <!-- Formulário de envio -->
+        <form method="POST">
+          <div class="field">
+            <label for="password">A tua password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password da conta"
+              autocomplete="current-password"
+              required
+            >
+            <p class="hint">Confirma a tua identidade antes de enviar.</p>
+          </div>
+
+          <div class="field">
+            <label for="recipient_email">E-mail do destinatário</label>
+            <input
+              type="email"
+              id="recipient_email"
+              name="recipient_email"
+              placeholder="exemplo@email.com"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="subject">Assunto</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Assunto da mensagem"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="body">Mensagem</label>
+            <textarea
+              id="body"
+              name="body"
+              placeholder="Escreve aqui a mensagem..."
+              rows="7"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">🔒 Cifrar e enviar</button>
+        </form>
+
+        <div class="nav-footer">
+          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
         </div>
+      {% endif %}
 
-        <div class="field">
-          <label for="body">Mensagem</label>
-          <textarea
-            id="body"
-            name="body"
-            placeholder="Escreve aqui a mensagem..."
-            rows="7"
-            required
-          ></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">🔒 Cifrar e enviar</button>
-      </form>
-
-      <div class="nav-footer">
-        <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
-      </div>
     </div>
-
   </div>
 </body>
 </html>

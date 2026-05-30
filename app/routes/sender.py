@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash
 from flask_login import login_required, current_user
 from app import db
 from app.models.models import Message
@@ -8,10 +8,14 @@ from app.crypto.aes_email import (
     hash_code,
     create_hmac
 )
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+
+ph = PasswordHasher()
 
 sender_bp = Blueprint('sender', __name__, url_prefix='/send')
 
@@ -22,13 +26,21 @@ sender_bp = Blueprint('sender', __name__, url_prefix='/send')
 @login_required
 def send_message():
     if request.method == 'POST':
+        password       = request.form.get('password', '').strip()
         recipient_email = request.form.get('recipient_email')
         subject = request.form.get('subject')
         body = request.form.get('body')
 
         #Validação básica de campos obrigatórios
-        if not recipient_email or not subject or not body:
+        if not password or not recipient_email or not subject or not body:
             flash('Preenche todos os campos.', 'error')
+            return render_template('sender/send.html')
+
+        # Verifica a password antes de qualquer operação (requisito 3 do enunciado)
+        try:
+            ph.verify(current_user.password_hash, password)
+        except VerifyMismatchError:
+            flash('Password incorreta.', 'error')
             return render_template('sender/send.html')
 
         #Gera o código aleatório de 32 chars hexadecimal para enviar ao destinatário
@@ -54,12 +66,13 @@ def send_message():
         db.session.add(message)
         db.session.commit()
 
-        #Envia o e-mail ao destinatário com o ciphertext e o código
+        #Envia o e-mail ao destinatário com o ciphertext, o código e o ID da mensagem
         success = send_email(
             recipient=recipient_email,
             subject=subject,
             ciphertext=ciphertext,
-            code=code
+            code=code,
+            message_id=message.id
         )
 
         if success:
@@ -72,7 +85,7 @@ def send_message():
     return render_template('sender/send.html')
 
 
-def send_email(recipient, subject, ciphertext, code):
+def send_email(recipient, subject, ciphertext, code, message_id):
     """Envia o e-mail com o corpo cifrado e instruções para o destinatário."""
     try:
         system_url = os.getenv('SYSTEM_URL', 'http://localhost:5000')
@@ -85,7 +98,9 @@ def send_email(recipient, subject, ciphertext, code):
         body = f"""Se quiser ler este e-mail, aceda ao sistema:
 {system_url}/receive/
 
-e confirme a receção com o código: {code}
+e confirme a receção com:
+  ID da mensagem : {message_id}
+  Código         : {code}
 
 --- MENSAGEM CIFRADA (não é legível sem o código) ---
 {ciphertext}

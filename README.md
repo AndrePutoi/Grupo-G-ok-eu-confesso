@@ -7,6 +7,27 @@ Sistema web que garante que o destinatário de um email realmente leu a mensagem
 ## Requisitos
 - Python 3.10+
 - pip
+- MailHog (servidor SMTP local para testes)
+
+## Instalação do MailHog
+
+O MailHog simula um servidor de e-mail localmente — os e-mails enviados pela aplicação aparecem numa interface web em vez de serem enviados de verdade.
+
+**Windows:**
+1. Descarrega o executável `MailHog_windows_amd64.exe` de https://github.com/mailhog/MailHog/releases
+2. Coloca-o na raiz do projeto (já incluído no repositório)
+
+**Mac:**
+```bash
+brew install mailhog
+```
+
+**Linux:**
+```bash
+sudo apt install mailhog
+# ou
+go install github.com/mailhog/MailHog@latest
+```
 
 ## Como correr o projeto
 
@@ -44,15 +65,31 @@ import secrets
 print(secrets.token_hex(32))
 ```
 
-**5. Corre a aplicação**
+> As variáveis `MAIL_HOST`, `MAIL_PORT`, `MAIL_FROM` e `SYSTEM_URL` são opcionais — os valores por defeito funcionam para execução local com MailHog.
+
+**5. Arranca o MailHog** (numa janela separada)
+
+Windows:
+```bash
+.\MailHog_windows_amd64.exe
+```
+
+Mac/Linux:
+```bash
+mailhog
+```
+
+**6. Arranca a aplicação** (noutra janela)
 ```bash
 python run.py
 ```
 
-**6. Abre o browser em**
-```
-http://localhost:5000
-```
+**7. Abre o browser**
+
+| URL | Descrição |
+|-----|-----------|
+| http://localhost:5000 | Aplicação web |
+| http://localhost:8025 | Interface do MailHog (e-mails enviados) |
 
 ---
 
@@ -87,13 +124,13 @@ ok-eu-confesso/
 
 ## Divisão de tarefas
 
-| Pessoa | Responsabilidade |
-|--------|-----------------|
-| Pessoa 1 | Setup, autenticação, base de dados, integração |
-| Pessoa 2 | Chaves RSA, assinaturas digitais (`crypto/rsa_keys.py`) |
-| Pessoa 3 | Cifra AES, códigos, PBKDF2 (`crypto/aes_email.py`) |
-| Pessoa 4 | Envio de emails, lógica do destinatário (`routes/sender.py`, `routes/receiver.py`) |
-| Pessoa 5 | Frontend, recibos, verificação (`templates/`, `static/`) |
+| Pessoa          | Responsabilidade |
+|-----------------|-----------------|
+| André Putoi     | Setup, autenticação, base de dados, integração |
+| Angelina Santos | Chaves RSA, assinaturas digitais (`crypto/rsa_keys.py`) |
+| João Craveiro   | Cifra AES, códigos, PBKDF2 (`crypto/aes_email.py`) |
+| Patrícia Marcos | Envio de emails, lógica do destinatário (`routes/sender.py`, `routes/receiver.py`) |
+| Carolina Raposo | Frontend, recibos, verificação (`templates/`, `static/`) |
 
 ---
 
