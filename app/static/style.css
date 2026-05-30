@@ -158,6 +158,8 @@ textarea {
   padding: 13px 16px;
   font-family: var(--sans);
   font-size: 17px;
+  color: #f8fafc;
+  caret-color: var(--accent);
 }
 
 input[type="text"]::placeholder,
@@ -165,6 +167,7 @@ input[type="email"]::placeholder,
 input[type="password"]::placeholder,
 textarea::placeholder {
   color: var(--text-muted);
+  opacity: 1;
 }
 
 input[type="text"]:focus,
@@ -212,9 +215,9 @@ textarea {
 }
 
 .confirm-box span {
-  font-size: 13.5px;
+  font-size: 17px;
   color: var(--text-dim);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* ── Buttons ── */
@@ -485,9 +488,19 @@ textarea {
 
 /* ── Hint text ── */
 .hint {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 5px;
+  font-size: 15px;
+  color: var(--text-dim);
+  margin-top: 8px;
+  line-height: 1.5;
+  display: block;
+}
+
+
+.hint-intro {
+  font-size: 17px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  line-height: 1.6;
 }
 
 /* ── Responsive ── */
@@ -495,3 +508,4 @@ textarea {
   body { padding: 20px 12px 60px; }
   .card { padding: 24px 20px; }
 }
+
