@@ -1,6 +1,0 @@
-venv/
-__pycache__/
-.env
-*.pyc
-instance/
-MailHog_windows_amd64.exe
