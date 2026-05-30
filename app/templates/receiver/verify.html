@@ -38,18 +38,22 @@
               {% endif %}
             </span>
           </div>
+
           <div class="receipt-row">
             <span class="label">ID da mensagem</span>
             <span class="value">{{ result.message_id }}</span>
           </div>
+
           <div class="receipt-row">
             <span class="label">Destinatário</span>
             <span class="value">{{ result.recipient_email }}</span>
           </div>
+
           <div class="receipt-row">
             <span class="label">Data / Hora</span>
             <span class="value">{{ result.timestamp }}</span>
           </div>
+
           <div class="receipt-row">
             <span class="label">Assinatura RSA</span>
             <span class="value">
@@ -62,8 +66,13 @@
           </div>
         </div>
 
-        <a href="{{ url_for('receiver.verify_receipt') }}" class="btn btn-secondary" style="width:100%; margin-bottom:10px; text-align:center;">↩ Verificar outro</a>
-        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">← Voltar ao painel</a>
+        <a href="{{ url_for('receiver.verify_receipt') }}" class="btn btn-secondary" style="width:100%; margin-bottom:10px; text-align:center;">
+          ↩ Verificar outro
+        </a>
+
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">
+          ← Voltar ao painel
+        </a>
 
       {% else %}
         <p style="font-size:14px; color:var(--text-dim); margin-bottom:20px;">
@@ -77,11 +86,13 @@
               type="text"
               id="message_id"
               name="message_id"
-              placeholder="ex: a3f9b2c1..."
+              placeholder="ex: 1"
               autocomplete="off"
               required
             >
-            <p class="hint">O ID foi-te mostrado quando enviaste a mensagem.</p>
+            <p class="hint">
+              O ID numérico da mensagem (ex: 1, 2, 3...)
+            </p>
           </div>
 
           <div class="field">
@@ -93,14 +104,21 @@
               rows="5"
               required
             ></textarea>
-            <p class="hint">Chave pública do destinatário, em formato PEM.</p>
+
+            <p class="hint">
+              Chave pública do destinatário, em formato PEM.
+            </p>
           </div>
 
-          <button type="submit" class="btn btn-primary">🔍 Verificar</button>
+          <button type="submit" class="btn btn-primary">
+            🔍 Verificar
+          </button>
         </form>
 
         <div class="nav-footer">
-          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
+          <a href="{{ url_for('auth.dashboard') }}">
+            ← Voltar ao painel
+          </a>
         </div>
       {% endif %}
     </div>
