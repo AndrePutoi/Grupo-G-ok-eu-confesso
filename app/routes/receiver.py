@@ -8,6 +8,8 @@ import json
 receiver_bp = Blueprint('receiver', __name__, url_prefix='/receive')
 
 
+#GET  — mostra o formulário para inserir o código, chave privada e ciphertext
+#POST — processa os dados, decifra a mensagem e gera o recibo assinado
 @receiver_bp.route('/', methods=['GET', 'POST'])
 def receive_message():
     decrypted_body = None
@@ -20,24 +22,23 @@ def receive_message():
         confirmed_receipt = request.form.get('confirm_receipt')
         confirmed_read    = request.form.get('confirm_read')
 
-        # 1. Validação básica
+        #Validação básica de campos obrigatórios
         if not code or not password or not private_key_json or not ciphertext:
             flash('Preenche todos os campos obrigatórios.', 'error')
             return render_template('receiver/receive.html')
 
-        # 2. Verifica se o utilizador confirmou receção e leitura
+        #Verifica se o utilizador confirmou receção e leitura
         if confirmed_receipt != 'yes' or confirmed_read != 'yes':
             flash('Tens de confirmar a receção e que vais ler a mensagem.', 'warning')
             return render_template('receiver/receive.html')
 
-        # 3. Verifica se o código existe na base de dados
+        #Procura a mensagem na BD pelo ciphertext e verifica o código
         message = Message.query.filter_by(ciphertext=ciphertext).first()
         if not message or not verify_code(code, message.code_hash):
             flash('Código ou mensagem inválidos.', 'error')
             return render_template('receiver/receive.html')
 
-        # 4. Desencripta a chave privada com a password (Pessoa 2)
-        # A chave privada é colada como JSON: {"sal":..., "iv":..., "encrypted_key":...}
+        #Desencripta a chave privada RSA do destinatário
         try:
             encrypted_key_data = json.loads(private_key_json)
             private_key_pem = decrypt_private_key(encrypted_key_data, password)
@@ -45,7 +46,7 @@ def receive_message():
             flash('Chave privada ou password incorretos.', 'error')
             return render_template('receiver/receive.html')
 
-        # 5. Decifra o corpo do e-mail verificando o HMAC (Pessoa 3)
+        #Decifra o corpo do e-mail verificando o HMAC para garantir a integridade
         try:
             decrypted_body = decrypt_email_body_verified(
                 ciphertext,
@@ -56,7 +57,7 @@ def receive_message():
             flash(f'Erro ao decifrar: {e}', 'error')
             return render_template('receiver/receive.html')
 
-        # 6. Gera e guarda o recibo assinado digitalmente (Pessoa 2)
+        #Gera e guarda o recibo assinado digitalmente
         try:
             receipt_text = f"Mensagem {message.id} recebida e lida."
             signed = sign_receipt(receipt_text, private_key_pem)
@@ -77,6 +78,8 @@ def receive_message():
     return render_template('receiver/receive.html', decrypted_body=decrypted_body)
 
 
+#GET  — mostra o formulário para inserir o ID da mensagem e a chave pública.
+#POST — verifica se existe recibo e valida a assinatura digital do destinatário.
 @receiver_bp.route('/verify', methods=['GET', 'POST'])
 def verify_receipt():
     result = None
@@ -89,14 +92,15 @@ def verify_receipt():
             flash('Preenche todos os campos.', 'error')
             return render_template('receiver/verify.html', result=result)
 
-        # Procura o recibo na base de dados
+        #Procura o recibo na base de dados
         receipt = Receipt.query.filter_by(message_id=message_id).first()
 
         if not receipt:
             flash('Nenhum recibo encontrado para esta mensagem.', 'error')
             return render_template('receiver/verify.html', result=result)
 
-        # Verifica a assinatura do recibo (Pessoa 2)
+        #Reconstrói o texto do recibo para verificar a assinatura
+        #Verifica a assinatura do recibo
         receipt_text = f"Mensagem {message_id} recebida e lida."
         is_valid = verify_signature(
             receipt_text,

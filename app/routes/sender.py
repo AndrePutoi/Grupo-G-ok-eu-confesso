@@ -15,6 +15,9 @@ import os
 
 sender_bp = Blueprint('sender', __name__, url_prefix='/send')
 
+
+#GET  — mostra o formulário para escrever a mensagem.
+#POST — processa o envio: cifra a mensagem, guarda na BD e envia o e-mail.
 @sender_bp.route('/', methods=['GET', 'POST'])
 @login_required
 def send_message():
@@ -23,24 +26,24 @@ def send_message():
         subject = request.form.get('subject')
         body = request.form.get('body')
 
-        # Validação básica
+        #Validação básica de campos obrigatórios
         if not recipient_email or not subject or not body:
             flash('Preenche todos os campos.', 'error')
             return render_template('sender/send.html')
 
-        # 1. Gera o código aleatório de 32 chars hexadecimal (Pessoa 3)
+        #Gera o código aleatório de 32 chars hexadecimal para enviar ao destinatário
         code = generate_code()
 
-        # 2. Cifra o corpo do e-mail com AES-256-CTR (Pessoa 3)
+        #Cifra o corpo do e-mail com AES-256-CTR usando o código como chave
         ciphertext = encrypt_email_body(body, code)
 
-        # 3. Gera o HMAC para integridade (Pessoa 3 - bónus)
+        #Gera o HMAC para integridade usando o código como chave e o ciphertext como mensagem
         mac = create_hmac(ciphertext, code)
 
-        # 4. Faz hash do código para guardar na BD (nunca guardamos o código em claro)
+        #Faz hash do código para guardar na BD
         code_hash = hash_code(code)
 
-        # 5. Guarda a mensagem na base de dados
+        #Guarda a mensagem na base de dados 
         message = Message(
             sender_id=current_user.id,
             recipient_email=recipient_email,
@@ -51,7 +54,7 @@ def send_message():
         db.session.add(message)
         db.session.commit()
 
-        # 6. Envia o e-mail com o corpo cifrado + código + link
+        #Envia o e-mail ao destinatário com o ciphertext e o código
         success = send_email(
             recipient=recipient_email,
             subject=subject,
@@ -64,7 +67,7 @@ def send_message():
         else:
             flash('Mensagem guardada mas erro ao enviar e-mail.', 'warning')
 
-        return redirect(url_for('sender.send_message'))
+        return render_template('sender/send.html', message_id=message.id)
 
     return render_template('sender/send.html')
 
@@ -93,6 +96,7 @@ e confirme a receção com o código: {code}
         smtp_host = os.getenv('MAIL_HOST', 'localhost')
         smtp_port = int(os.getenv('MAIL_PORT', 1025))
 
+        #Liga ao servidor SMTP e envia o e-mail
         with smtplib.SMTP(smtp_host, smtp_port) as server:
             server.sendmail(msg['From'], recipient, msg.as_string())
 
