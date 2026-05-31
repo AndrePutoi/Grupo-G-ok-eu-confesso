@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask_login import login_required, current_user
 from app.models.models import Message, Receipt, User
 from app.crypto.aes_email import decrypt_email_body_verified, hash_code
 from app.crypto.rsa_keys import decrypt_private_key, sign_receipt, verify_signature
@@ -150,7 +151,9 @@ def receive_message():
 # GET  — mostra o formulário para inserir o ID da mensagem e a chave pública
 # POST — verifica se existe recibo e valida a assinatura digital do destinatário
 @receiver_bp.route('/verify', methods=['GET', 'POST'])
+@login_required
 def verify_receipt():
+    """Apenas o emissor da mensagem pode verificar o recibo — requer sessão ativa."""
     result = None
 
     if request.method == 'POST':
@@ -163,6 +166,11 @@ def verify_receipt():
         message = Message.query.get(message_id)
         if not message:
             flash('Mensagem não encontrada.', 'error')
+            return render_template('receiver/verify.html', result=result)
+
+        # Verifica que o utilizador logado é o emissor da mensagem
+        if message.sender_id != current_user.id:
+            flash('Não tens permissão para verificar esta mensagem.', 'error')
             return render_template('receiver/verify.html', result=result)
 
         receipt = Receipt.query.filter_by(message_id=message_id).first()
