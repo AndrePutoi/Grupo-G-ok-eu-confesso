@@ -25,6 +25,7 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     recipient_email = db.Column(db.String(256), nullable=False)
+    subject = db.Column(db.String(256), nullable=True)
     code_hash = db.Column(db.String(256), nullable=False)  # hash do código, nunca o código em claro
     ciphertext = db.Column(db.Text, nullable=False)
     mac = db.Column(db.String(256), nullable=True)  # HMAC opcional (bónus)

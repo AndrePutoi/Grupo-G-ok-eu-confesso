@@ -59,6 +59,7 @@ def send_message():
         message = Message(
             sender_id=current_user.id,
             recipient_email=recipient_email,
+            subject=subject,
             code_hash=code_hash,
             ciphertext=ciphertext,
             mac=mac
