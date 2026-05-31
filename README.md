@@ -15,7 +15,7 @@ O MailHog simula um servidor de e-mail localmente — os e-mails enviados pela a
 
 **Windows:**
 1. Descarrega o executável `MailHog_windows_amd64.exe` de https://github.com/mailhog/MailHog/releases
-2. Coloca-o na raiz do projeto (já incluído no repositório)
+2. Coloca-o na raiz do projeto (não é enviado para o GitHub e está listado no .gitignore)
 
 **Mac:**
 ```bash
@@ -111,10 +111,17 @@ ok-eu-confesso/
 │   ├── templates/           ← páginas HTML
 │   │   ├── login.html
 │   │   ├── register.html
-│   │   └── dashboard.html
+│   │   ├── dashboard.html
+│   │   ├── receipt.html
+│   │   ├── sender/
+│   │   │   └── send.html
+│   │   └── receiver/
+│   │       ├── receive.html
+│   │       └── verify.html
 │   └── static/              ← CSS, JS, imagens
 │       └── style.css
 ├── config.py                ← configurações gerais
+├── .gitignore               ← ficheiros locais ignorados pelo Git
 ├── .env                     ← variáveis secretas (não vai para o git)
 ├── requirements.txt
 └── run.py                   ← ponto de entrada
