@@ -153,30 +153,44 @@ def receive_message():
 @receiver_bp.route('/verify', methods=['GET', 'POST'])
 @login_required
 def verify_receipt():
-    """Apenas o emissor da mensagem pode verificar o recibo — requer sessão ativa."""
+    """Apenas o emissor da mensagem pode verificar o recibo — requer sessão ativa.
+    Lista todas as mensagens enviadas pelo utilizador com o estado do recibo."""
     result = None
+
+    # Aceita message_id via URL (GET) ou formulário (POST)
+    prefilled_id = request.args.get('message_id', '')
+
+    # Lista de mensagens enviadas pelo utilizador com estado do recibo
+    sent_messages = Message.query.filter_by(sender_id=current_user.id).order_by(Message.created_at.desc()).all()
+    receipts_map = {r.message_id: r for r in Receipt.query.filter(Receipt.message_id.in_([m.id for m in sent_messages])).all()}
 
     if request.method == 'POST':
         message_id = request.form.get('message_id', '').strip()
 
+        def render_verify(**kwargs):
+            return render_template('receiver/verify.html', result=result,
+                                   prefilled_id=prefilled_id,
+                                   sent_messages=sent_messages,
+                                   receipts_map=receipts_map, **kwargs)
+
         if not message_id:
             flash('Preenche o ID da mensagem.', 'error')
-            return render_template('receiver/verify.html', result=result)
+            return render_verify()
 
         message = Message.query.get(message_id)
         if not message:
             flash('Mensagem não encontrada.', 'error')
-            return render_template('receiver/verify.html', result=result)
+            return render_verify()
 
         # Verifica que o utilizador logado é o emissor da mensagem
         if message.sender_id != current_user.id:
             flash('Não tens permissão para verificar esta mensagem.', 'error')
-            return render_template('receiver/verify.html', result=result)
+            return render_verify()
 
         receipt = Receipt.query.filter_by(message_id=message_id).first()
         if not receipt:
             flash('Nenhum recibo encontrado — a mensagem ainda não foi lida.', 'error')
-            return render_template('receiver/verify.html', result=result)
+            return render_verify()
 
         confirmed_at = receipt.confirmed_at.strftime('%Y-%m-%dT%H:%M:%SZ')
         receipt_text = (
@@ -203,4 +217,5 @@ def verify_receipt():
         else:
             flash('Assinatura inválida!', 'error')
 
-    return render_template('receiver/verify.html', result=result)
+    return render_template('receiver/verify.html', result=result, prefilled_id=prefilled_id,
+                           sent_messages=sent_messages, receipts_map=receipts_map)

@@ -90,6 +90,7 @@
               pattern="[0-9]+"
               inputmode="numeric"
               autocomplete="off"
+              value="{{ prefilled_id }}"
               required
             >
             <p class="hint">O ID numérico mostrado após o envio da mensagem.</p>
@@ -101,11 +102,36 @@
         </form>
 
         <div class="nav-footer">
-          <a href="{{ url_for('auth.dashboard') }}">
-            ← Voltar ao painel
-          </a>
+          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
         </div>
       {% endif %}
+
+      {% if sent_messages %}
+      <div class="divider"></div>
+      <p class="card-title" style="margin-top:0;"><span class="icon">📋</span> As tuas mensagens enviadas</p>
+      <div class="receipt-box">
+        {% for msg in sent_messages %}
+          {% set receipt = receipts_map.get(msg.id) %}
+          <div class="receipt-row" style="align-items:center; padding:6px 0; font-size:13px;">
+            <span class="label" style="font-size:13px;">
+              <strong>#{{ msg.id }}</strong> — {{ msg.recipient_email }}<br>
+              <span style="color:var(--text-muted); font-size:11px;">{{ msg.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </span>
+            <span class="value" style="text-align:right; font-size:12px;">
+              {% if receipt %}
+                <span class="badge badge-valid" style="font-size:11px;">✓ Lida</span><br>
+                <span style="color:var(--text-muted); font-size:11px;">{{ receipt.confirmed_at.strftime('%Y-%m-%d %H:%M') }}</span><br>
+                <a href="{{ url_for('receiver.verify_receipt', message_id=msg.id) }}" style="font-size:11px;">Verificar recibo</a>
+              {% else %}
+                <span class="badge badge-pending" style="font-size:11px;">⏳ Não lida</span>
+              {% endif %}
+            </span>
+          </div>
+          {% if not loop.last %}<div class="divider" style="margin:0;"></div>{% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
     </div>
 
   </div>
