@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 PBKDF2_ITERATIONS = 400_000
 AES_KEY_SIZE = 32          # 32 bytes = 256 bits
 SALT_SIZE = 16             # 128 bits | o salt é um valor aleatório, dessa forma 2 pessoas nao conseguem gerar a mesma chave
-NONCE_SIZE = 16            # AES CTR usa bloco de 128 bits | faz o mesmo que o salt
+NONCE_SIZE = 16            # AES CTR usa bloco de 128 bits |  garante que a cifra muda em cada mensagem
 
 
 def _b64_encode(data: bytes) -> str:
