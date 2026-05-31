@@ -161,3 +161,4 @@ ok-eu-confesso/
 - **Flask-Login** — gestão de sessões
 - **argon2** — hash seguro de passwords
 - **cryptography** — AES, RSA, PBKDF2
+- **MailHog** — servidor SMTP local para simulação de envio de e-mails
