@@ -36,7 +36,11 @@
 
         <p style="font-size:12px; color:var(--text-muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.08em;">Mensagem</p>
         <div class="message-output">{{ decrypted_body }}</div>
-        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">← Voltar ao painel</a>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">← Voltar ao painel</a>
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-primary">→ Ir para o login</a>
+        {% endif %}
 
       {% else %}
         <form method="POST">
@@ -110,9 +114,13 @@
         </form>
 
         <div class="nav-footer">
-          <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
-          &nbsp;·&nbsp;
-          <a href="{{ url_for('auth.register') }}">Ainda não tens conta? Regista-te</a>
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('auth.dashboard') }}">← Voltar ao painel</a>
+          {% else %}
+            <a href="{{ url_for('auth.login') }}">→ Ir para o login</a>
+            &nbsp;·&nbsp;
+            <a href="{{ url_for('auth.register') }}">Ainda não tens conta? Regista-te</a>
+          {% endif %}
         </div>
       {% endif %}
     </div>
