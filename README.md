@@ -109,7 +109,7 @@ ok-eu-confesso/
 │   │   ├── rsa_keys.py      ← geração de chaves RSA e assinaturas
 │   │   ├── aes_email.py     ← cifra e decifra do email
 │   │   ├── test_rsa.py      ← testes unitários às funções RSA
-│   │   └── test_aes.py ← testes unitários à cifra AES e HMAC
+│   │   └── test_aes.py      ← testes unitários à cifra AES e HMAC
 │   ├── templates/           ← páginas HTML
 │   │   ├── login.html
 │   │   ├── register.html
